@@ -1,0 +1,75 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.3.0
+    container_name: mysql-container
+    restart: always
+    ports:
+      - "3307:3306"
+    networks:
+      - backend-net
+    environment:
+      - MYSQL_DATABASE=studentdb
+      - MYSQL_USER=th1enlm02
+      - MYSQL_PASSWORD=th1enlm02
+      - MYSQL_ROOT_PASSWORD=th1enlm02_root
+      - MYSQL_HOST=mysql-container
+    volumes:
+      - mysql-data:/var/lib/mysql
+      # - ./mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3306"]
+      interval: 30s
+      timeout: 20s
+      retries: 5
+      start_period: 30s
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin-container
+    restart: always
+    ports:
+      - "81:80"
+    networks:
+      - backend-net
+    environment:
+      - PMA_HOST=mysql
+      - MYSQL_ROOT_PASSWORD=th1enlm02_root
+    depends_on:
+      - mysql
+  student-frontend:
+    build: 
+      context: ./studentfrontend
+      dockerfile: Dockerfile
+    image: th1enlm02/student-frontend
+    container_name: student-frontend-container
+    ports:
+      - "3001:3000"
+    networks:
+      - frontend-net
+    environment:
+      - REACT_APP_API_URL=http://localhost:8080/
+    depends_on:
+      - student-backend
+  student-backend:
+    build: 
+      context: ./studentsystem
+      dockerfile: Dockerfile
+    image: th1enlm02/student-backend
+    container_name: student-backend-container
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-container:3306/studentdb
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=th1enlm02_root
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - frontend-net
+      - backend-net
+networks:
+  frontend-net:
+  backend-net:
+volumes:
+  mysql-data:

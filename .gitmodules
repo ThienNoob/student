@@ -1,0 +1,8 @@
+[submodule "studentfrontend"]
+	path = studentfrontend
+	url = https://github.com/th1enlm02/studentfrontend.git
+	branch = main
+[submodule "studentsystem"]
+	path = studentsystem
+	url = https://github.com/th1enlm02/studentsystem.git
+	branch = main
