@@ -38,7 +38,7 @@ services:
       - mysql
   student-frontend:
     build: 
-      context: ./studentfrontend
+      context: ./student-frontend
       dockerfile: Dockerfile
     image: chucthien0303/student-frontend
     container_name: student-frontend-container
@@ -52,7 +52,7 @@ services:
       - student-backend
   student-backend:
     build: 
-      context: ./studentsystem
+      context: ./student-backend
       dockerfile: Dockerfile
     image: chucthien0303/student-backend
     container_name: student-backend-container
