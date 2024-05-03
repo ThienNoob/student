@@ -1,69 +1,45 @@
-name: CI/CD Pipeline
+name: Docker Deployment
 
 on:
   push:
     branches:
-      - main  # Thay thế bằng tên branch của bạn
+      - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-    
-    
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
-      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASS }}
 
-    - name: Authenticate with Docker Hub
-      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
-    - name: Set up database
-      run: |
-        echo 'Building mysql image...'
-        docker compose build mysql
-        echo 'Building phpmyadmin image...'
-        docker compose build phpmyadmin
+      - name: Build and Push Docker Images
+        run: |
+          docker compose build
+          docker compose push
 
-        
-    - name: Check Docker version
-      run: docker --version
+      - name: Deploy to Dev Environment
+        run: |
+          docker-compose -f docker-compose.yml down -v
+          docker container prune -f
+          docker-compose -f docker-compose.yml up -d
 
-    
+      - name: Clean Up
+        run: |
+          docker logout
+          docker network ls
+          docker volume ls
+          docker images
 
-
-    - name: Build front-end application image
-      run: |
-        echo 'student-frontend is being built...'
-        docker compose build student-frontend
-
-    - name: Push images to Docker Hub
-      run: |
-        echo 'Pushing images to Docker Hub...'
-        docker compose push
-
-    - name: Clean and Deploy to Dev Environment
-      run: |
-        echo 'Listing images and containers...'
-        docker images
-        docker compose ps
-
-        echo 'Cleaning...'
-        docker compose down -v
-        echo y | docker container prune
-        docker compose ps
-
-        echo 'Deploying...'
-        docker compose up -d
-        docker compose ps
-        docker network ls
-        docker volume ls
-
-    - name: Clean up
-      run: |
-        docker logout
+      - name: Check Deployment Status
+        run: |
+          # Check the status as needed
