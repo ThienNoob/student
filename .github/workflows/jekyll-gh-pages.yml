@@ -27,6 +27,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: recursive  # Đảm bảo các submodule được checkout cùng với repository chính
+
+      - name: Set up submodule
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build Docker images student-backend
