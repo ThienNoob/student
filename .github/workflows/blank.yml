@@ -1,0 +1,60 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Thay thế bằng tên branch của bạn
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Authenticate with Docker Hub
+      run: echo "${{ secrets.DOCKER_USERNAME }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Set up database
+      run: |
+        echo 'Building mysql image...'
+        docker compose build mysql
+        echo 'Building phpmyadmin image...'
+        docker compose build phpmyadmin
+
+    - name: Build back-end application image
+      run: |
+        echo 'student-backend is being built...'
+        docker compose build student-backend
+
+    - name: Build front-end application image
+      run: |
+        echo 'student-frontend is being built...'
+        docker compose build student-frontend
+
+    - name: Push images to Docker Hub
+      run: |
+        echo 'Pushing images to Docker Hub...'
+        docker compose push
+
+    - name: Clean and Deploy to Dev Environment
+      run: |
+        echo 'Listing images and containers...'
+        docker images
+        docker compose ps
+
+        echo 'Cleaning...'
+        docker compose down -v
+        echo y | docker container prune
+        docker compose ps
+
+        echo 'Deploying...'
+        docker compose up -d
+        docker compose ps
+        docker network ls
+        docker volume ls
+
+    - name: Clean up
+      run: |
+        docker logout
