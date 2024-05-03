@@ -42,8 +42,7 @@ jobs:
           source: ./
           destination: ./_site
 
-      - name: Create index.html
-        run: echo "<h1>Hello, world!</h1>" > ./_site/index.html
+      
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
