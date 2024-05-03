@@ -36,8 +36,8 @@ jobs:
 
     - name: Build back-end application image
       run: |
-        echo 'student-backend is being built...'
-        docker compose build student-backend
+        echo 'Building student-backend image...'
+        docker-compose -f docker-compose.yml build student-backend
 
     - name: Build front-end application image
       run: |
