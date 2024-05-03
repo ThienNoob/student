@@ -69,6 +69,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Copy front-end files
+        run: cp -r student-frontend/ _site/frontend
+      - name: Copy back-end files
+        run: cp -r student-backend/ _site/backend
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          branch: gh-pages
+          folder: _site
