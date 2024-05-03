@@ -28,14 +28,16 @@ jobs:
         docker compose -f docker-compose.yml build mysql
         docker compose -f docker-compose.yml build phpmyadmin
 
-    - name: Copy Dockerfile from submodule
-      run: cp student-backend/Dockerfile .
-
+  
     - name: Build back-end application image
-      run: docker compose -f docker-compose.yml build student-backend
+      run: |
+        cp student-backend/Dockerfile .
+        docker compose -f docker-compose.yml build student-backend
 
     - name: Build front-end application image
-      run: docker compose -f docker-compose.yml build student-frontend
+      run: |
+        cp student-backend/Dockerfile .
+        docker compose -f docker-compose.yml build student-frontend
 
     - name: Push images to Docker Hub
       run: docker compose -f docker-compose.yml push
