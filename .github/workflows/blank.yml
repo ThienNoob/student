@@ -34,10 +34,7 @@ jobs:
     - name: Check Docker version
       run: docker --version
 
-    - name: Build back-end application image
-      run: |
-        echo 'Building student-backend image...'
-        docker build -t chucthien03/student-backend ./student-backend
+    
 
 
     - name: Build front-end application image
