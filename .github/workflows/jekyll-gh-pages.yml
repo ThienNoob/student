@@ -73,10 +73,22 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
-      - name: Copy front-end files
-        run: cp -r student-frontend/ _site/frontend
-      - name: Copy back-end files
-        run: cp -r student-backend/ _site/backend
+          
+      - name: Run backend container
+        run: |
+          docker run -d --name student-backend chucthien03/student-backend
+          
+      - name: Run frontend container
+        run: |
+          docker run -d --name student-frontend chucthien03/student-frontend
+
+      - name: Wait for containers to start
+        run: sleep 10  # Đợi một thời gian để container khởi động
+
+      - name: Show running containers
+        run: |
+          docker ps -a
+
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
         with:
