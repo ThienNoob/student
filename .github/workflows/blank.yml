@@ -23,6 +23,10 @@ jobs:
         echo 'Building phpmyadmin image...'
         docker compose build phpmyadmin
 
+        
+    - name: Check Docker version
+      run: docker --version
+
     - name: Build back-end application image
       run: |
         echo 'student-backend is being built...'
