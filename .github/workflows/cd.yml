@@ -32,7 +32,7 @@ jobs:
         yes | docker container prune
         sudo docker compose -f docker-compose.yml up -d
         sudo docker compose ps
-        sudo docke network ls
+        sudo docker network ls
         sudo docker volume ls
 
     - name: Clean up
