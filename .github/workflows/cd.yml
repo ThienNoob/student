@@ -28,10 +28,10 @@ jobs:
     - name: Clean and Deploy to AWS Environment
       run: |
         sudo docker images
-        sudo docker-compose -f docker-compose.yml down -v
+        sudo docker compose -f docker-compose.yml down -v
         yes | docker container prune
-        sudo docker-compose -f docker-compose.yml up -d
-        sudo docker-compose ps
+        sudo docker compose -f docker-compose.yml up -d
+        sudo docker compose ps
         sudo docke network ls
         sudo docker volume ls
 
