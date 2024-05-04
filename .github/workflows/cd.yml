@@ -2,11 +2,10 @@ name: CD Pipeline
 
 on:
   workflow_run:
-    workflows: ["CI Pineline"]
+    workflows: ["CI Pipeline"]  # Chỉnh sửa tên workflow CI Pipeline thành "CI Pipeline"
     types:
-      -completed
+      - completed
   
-
 jobs:
   build:
     runs-on: seft-hosted
