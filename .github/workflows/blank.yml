@@ -48,6 +48,7 @@ jobs:
         docker compose -f docker-compose.yml down -v
         yes | docker container prune
         docker compose -f docker-compose.yml up -d
+        docker compose ps
         docker network ls
         docker volume ls
 
