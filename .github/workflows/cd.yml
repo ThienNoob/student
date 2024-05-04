@@ -1,11 +1,14 @@
 name: CD Pipeline
 
+#on:
+ # workflow_run:
+ #   workflows: ["CI Pipeline"]  # Chỉnh sửa tên workflow CI Pipeline thành "CI Pipeline"
+#    types:
+#      - completed
 on:
-  workflow_run:
-    workflows: ["CI Pipeline"]  # Chỉnh sửa tên workflow CI Pipeline thành "CI Pipeline"
-    types:
-      - completed
-  
+  push:
+    branches:
+      - main
 jobs:
   build:
     runs-on: seft-hosted
