@@ -24,25 +24,8 @@ jobs:
         git submodule sync --recursive
         git submodule update --init --recursive
 
-    
-    - name: Set up database
-      run: |
-        docker compose -f docker-compose.yml build mysql
-        docker compose -f docker-compose.yml build phpmyadmin
-
-  
-    - name: Build back-end application image
-      run: |
-        cp student-backend/Dockerfile .
-        docker compose -f docker-compose.yml build student-backend
-
-    - name: Build front-end application image
-      run: |
-        cp student-backend/Dockerfile .
-        docker compose -f docker-compose.yml build student-frontend
-
    
-    - name: Clean and Deploy to Dev Environment
+    - name: Clean and Deploy to AWS Environment
       run: |
         docker images
         docker compose -f docker-compose.yml down -v
