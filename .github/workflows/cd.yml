@@ -1,0 +1,58 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pineline"]
+    types:
+      -completed
+  
+
+jobs:
+  build:
+    runs-on: seft-hosted
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive  # Đảm bảo các submodule được checkout cùng với repository chính
+
+    - name: Set up submodule
+      run: |
+        git submodule sync --recursive
+        git submodule update --init --recursive
+
+    - name: Authenticate with Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+    - name: Set up database
+      run: |
+        docker compose -f docker-compose.yml build mysql
+        docker compose -f docker-compose.yml build phpmyadmin
+
+  
+    - name: Build back-end application image
+      run: |
+        cp student-backend/Dockerfile .
+        docker compose -f docker-compose.yml build student-backend
+
+    - name: Build front-end application image
+      run: |
+        cp student-backend/Dockerfile .
+        docker compose -f docker-compose.yml build student-frontend
+
+    - name: Push images to Docker Hub
+      run: docker compose -f docker-compose.yml push
+
+    - name: Clean and Deploy to Dev Environment
+      run: |
+        docker images
+        docker compose -f docker-compose.yml down -v
+        yes | docker container prune
+        docker compose -f docker-compose.yml up -d
+        docker compose ps
+        docker network ls
+        docker volume ls
+
+    - name: Clean up
+      run: docker logout
