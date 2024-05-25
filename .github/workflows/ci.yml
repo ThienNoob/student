@@ -13,12 +13,13 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
       with:
-        submodules: recursive  # Đảm bảo các submodule được checkout cùng với repository chính
+        submodules: recursive  # Ensure submodules are checked out with the main repository
 
-    - name: Set up submodule
+    - name: Update submodule
       run: |
         git submodule sync --recursive
         git submodule update --init --recursive
+        git submodule update --remote --merge
 
     - name: Authenticate with Docker Hub
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
@@ -28,7 +29,6 @@ jobs:
         docker compose -f docker-compose.yml build mysql
         docker compose -f docker-compose.yml build phpmyadmin
 
-  
     - name: Build back-end application image
       run: |
         cp student-backend/Dockerfile .
