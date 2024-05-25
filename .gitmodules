@@ -1,14 +1,9 @@
-[submodule "studentfrontend"]
-	path = student-frontend
-	url = https://github.com/ThienNoob/student-frontend.git
-	branch = main
-[submodule "studentsystem"]
-	path = student-backend
-	url = https://github.com/ThienNoob/student-backend.git
-	branch = main
+
 [submodule "student-frontend"]
 	path = student-frontend
 	url = https://github.com/ThienNoob/student-frontend.git
+	branch = main
 [submodule "student-backend"]
 	path = student-backend
 	url = https://github.com/ThienNoob/student-backend.git
+	branch = main
