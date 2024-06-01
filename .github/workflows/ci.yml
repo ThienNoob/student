@@ -15,6 +15,11 @@ jobs:
       uses: actions/checkout@v2
       with:
         submodules: recursive  # Ensure submodules are checked out with the main repository
+        
+    - name: Set up submodule
+      run: |
+        git submodule sync --recursive
+        git submodule update --init --recursive
 
     - name: Authenticate with Docker Hub
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
