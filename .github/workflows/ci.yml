@@ -16,12 +16,6 @@ jobs:
       with:
         submodules: recursive  # Ensure submodules are checked out with the main repository
 
-    - name: Update submodule
-      run: |
-        git submodule sync --recursive
-        git submodule update --init --recursive
-        git submodule update --remote --merge
-
     - name: Authenticate with Docker Hub
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
