@@ -18,6 +18,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
+          submodules: true
 
       - name: Git Submodule Update
         run: |
