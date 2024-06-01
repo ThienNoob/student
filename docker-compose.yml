@@ -52,7 +52,7 @@ services:
       - student-backend
   student-backend:
     build: 
-      context: ./studentbackend
+      context: ./student-backend
       dockerfile: Dockerfile
     image: chucthien03/student-backend
     container_name: student-backend-container
