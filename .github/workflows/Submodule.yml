@@ -29,5 +29,5 @@ jobs:
 
       - name: Commit update
         run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/${{ github.repository }}
+          git remote set-url origin https://github.com/ThienNoob/student.git
           git commit -am "Auto updated submodule references" && git push origin main || echo "No changes to commit"
