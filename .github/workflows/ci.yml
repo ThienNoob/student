@@ -27,10 +27,7 @@ jobs:
         docker compose -f docker-compose.yml build mysql
         docker compose -f docker-compose.yml build phpmyadmin
   
-    - name: Build back-end application image
-      run: |
-        cp student-backend/Dockerfile .
-        docker compose -f docker-compose.yml build student-backend
+   
     - name: Build front-end application image
       run: |
         cp student-backend/Dockerfile .
